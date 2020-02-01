@@ -68,6 +68,21 @@ class AlgoStrategy(gamelib.AlgoCore):
     NOTE: All the methods after this point are part of the sample starter-algo
     strategy and can safely be replaced for your custom algo.
     """
+    def startTurn(self,game_state):
+        game_state.attempt_spawn(DESTRUCTOR, [3,12],1)
+        game_state.attempt_spawn(DESTRUCTOR, [24, 12], 1)
+        game_state.attempt_spawn(DESTRUCTOR, [8, 8], 1)
+        game_state.attempt_spawn(DESTRUCTOR, [18, 8], 1)
+        game_state.attempt_spawn(DESTRUCTOR, [11, 4], 1)
+        game_state.attempt_spawn(DESTRUCTOR, [16, 3], 1)
+        game_state.attempt_spawn(SCRAMBLER, [5, 9], 1)
+        game_state.attempt_spawn(SCRAMBLER, [15, 8], 1)
+        game_state.attempt_spawn(PING, [5, 8], 1)
+        game_state.attempt_spawn(PING, [15, 9], 1)
+        game_state.attempt_spawn(PING, [14, 9], 1)
+
+
+
 
     def starter_strategy(self, game_state):
         """
@@ -76,13 +91,17 @@ class AlgoStrategy(gamelib.AlgoCore):
         For offense we will use long range EMPs if they place stationary units near the enemy's front.
         If there are no stationary units to attack in the front, we will send Pings to try and score quickly.
         """
+
+        game_state.attempt_spawn(EMP, [24, 10], 3)
         # First, place basic defenses
         self.build_defences(game_state)
         # Now build reactive defenses based on where the enemy scored
         self.build_reactive_defense(game_state)
 
         # If the turn is less than 5, stall with Scramblers and wait to see enemy's base
-        if game_state.turn_number < 5:
+        if game_state.turn_number == 1:
+            startTurn(self,game_state)
+        elif game_state.turn_number < 10:
             self.stall_with_scramblers(game_state)
         else:
             # Now let's analyze the enemy base to see where their defenses are concentrated.
